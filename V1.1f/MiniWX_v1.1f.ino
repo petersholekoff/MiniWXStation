@@ -47,6 +47,7 @@ SDK:2.2.1(cfd48f3)/Core:2.4.2/lwIP:2.0.3(STABLE-2_0_3_RELEASE/glue:arduino-2.4.1
 #include <stdlib.h>
 #include "FS.h"
 
+#include "BG_locale.h"
 #include "EN_Locale.h"
 #include "ES_Locale.h"
 #include "IT_Locale.h"
@@ -76,7 +77,8 @@ const char SOFT_VER[] = "v1.1f";
 //**************************************
 
 //**** CHOOSE WEBPAGES LANGUAGE
-#define LANG_ENGLISH
+#define LANG_BULGARIAN
+//#define LANG_ENGLISH
 //#define LANG_SPANISH
 //#define LANG_ITALIAN
 
@@ -85,13 +87,13 @@ const char SOFT_VER[] = "v1.1f";
 #define SER_MON_BAUDRATE 74880
 
 //**** How the station is named in your NET
-const char* WiFi_hostname = "MiniWX";
+const char* WiFi_hostname = "FW9998";
 
 //**** APRS PASSWORD (use -1 if you are using a CWOP callsign)
-const char* AprsPassw = "YourAprsNumericalPASS";
+const char* AprsPassw = "aXyh5rUVRE";
 
 //**** APRS COMMENT, you can set this string as you want (max 43 chars)
-const char* APRS_CMNT = "MiniWX Station .:.YourHomeTown.:.";
+const char* APRS_CMNT = "MiniWX .:.Troyan.:. https://troyan.info";
 
 //**** APRS_PRJ, Telemetry Project Title (max 23 chars)
 const char* APRS_PRJ = "MiniWX Project";
@@ -104,8 +106,8 @@ const char* APRS_PRJ = "MiniWX Project";
 //**** uncomment this for weatherunderground upload,remember to set ID and PASSWORD of your account
 //#define USE_WUNDER
 //* change ID and PASSWORD with yours
-const char ID [] = "YourWunderID";                      
-const char PASSWORD [] = "YourWunderPASSW";
+const char ID [] = "******";                      
+const char PASSWORD [] = "******";
 
 //**** show BME280 registers in Serial Output;
 //#define DISPLAY_BME_REGS
@@ -129,7 +131,7 @@ const char PASSWORD [] = "YourWunderPASSW";
 const char* NTP_Server = "ntp1.inrim.it"; //italian national institute for measures
 
 //**** Your time zone UTC related (floating point number)
-#define TIME_ZONE 1.0f
+#define TIME_ZONE 2.0f
 
 //**** Set credential for OTA firmware upgrade <<--->>
 //*uncomment the #define if you wanna use this handy feature
@@ -685,6 +687,9 @@ void AdjustFieldsets( String* page){
 //***********************************************************                                        
 void handleRoot() {
   
+#ifdef LANG_BULGARIAN  
+  String page = FPSTR(PAGE_Main_BG);
+#endif
 #ifdef LANG_ENGLISH  
   String page = FPSTR(PAGE_Main_EN);
 #endif
@@ -801,6 +806,9 @@ void handleSubmit(){
       message += FPSTR(HTTP_SCRIPT);
       message += FPSTR(HTTP_BODY);
       
+      #ifdef LANG_BULGARIAN  
+        message.replace(F("{{language}}"), "bg");
+      #endif
       #ifdef LANG_ENGLISH  
         message.replace(F("{{language}}"), "en");
       #endif
@@ -814,6 +822,9 @@ void handleSubmit(){
       //Display sysmsg in a new page and come back
       message += F("<fieldset style='width:49%'><legend style='text-shadow: 2px 1px grey; font-size: 18px;'>MiniWX&#8482; system message </legend>");
       
+      #ifdef LANG_BULGARIAN
+        message += F("<form><div class='divTable'><div class='divRow'><div class='divColumn' style='width:98%'><div class='notabheader'>Изпращане на пакет до APRS сървър...</div>");
+      #endif
       #ifdef LANG_ENGLISH
         message += F("<form><div class='divTable'><div class='divRow'><div class='divColumn' style='width:98%'><div class='notabheader'>Sending packets to APRS server...</div>");
       #endif
@@ -843,6 +854,9 @@ void handleSubmit(){
      
       message += F("<fieldset style='width:49%'><legend style='text-shadow: 2px 1px grey; font-size: 18px;'>MiniWX&#8482; system message </legend>");
       
+      #ifdef LANG_BULGARIAN
+        message += F("<form><div class='divTable'><div class='divRow'><div class='divColumn' style='width:98%'><div class='notabheader'>Изпращане на пакет до WUNDER сървър...</div>");
+      #endif
       #ifdef LANG_ENGLISH
         message += F("<form><div class='divTable'><div class='divRow'><div class='divColumn' style='width:98%'><div class='notabheader'>Sending packets to WUNDER server...</div>");
       #endif
@@ -872,7 +886,10 @@ void handleSubmit(){
      
       message += F("<fieldset style='width:49%'><legend style='text-shadow: 2px 1px grey; font-size: 18px;'>MiniWX&#8482; system message </legend>");
       
-	    #ifdef LANG_ENGLISH
+	    #ifdef LANG_BULGARIAN
+        message += F("<form><div class='divTable'><div class='divRow'><div class='divColumn' style='width:98%'><div class='notabheader'>Изпращане на NTP SYNC заявка до сървър...</div>");
+      #endif
+      #ifdef LANG_ENGLISH
         message += F("<form><div class='divTable'><div class='divRow'><div class='divColumn' style='width:98%'><div class='notabheader'>Sending NTP SYNC request to server...</div>");
       #endif
       #ifdef LANG_SPANISH
@@ -1078,6 +1095,9 @@ void handleJQuery() {
 //***********************************************************  
 void handleSettings() {
   
+#ifdef LANG_BULGARIAN
+  String page = FPSTR(PAGE_MiniWXSettings_BG);
+#endif
 #ifdef LANG_ENGLISH
   String page = FPSTR(PAGE_MiniWXSettings_EN);
 #endif
@@ -1144,6 +1164,9 @@ void handleNotFound() {
   String message;
 
   message += FPSTR(HTTP_HEAD);
+#ifdef LANG_BULGARIAN  
+  message.replace(F("{{language}}"), "bg");
+#endif
 #ifdef LANG_ENGLISH  
   message.replace(F("{{language}}"), "en");
 #endif
@@ -1188,6 +1211,9 @@ void handleGraphs() {
   
   message += FPSTR(HTTP_SVG_HEAD);
   
+#ifdef LANG_BULGARIAN  
+  message.replace(F("{{language}}"), "bg");
+#endif
 #ifdef LANG_ENGLISH  
   message.replace(F("{{language}}"), "en");
 #endif
@@ -1201,6 +1227,12 @@ void handleGraphs() {
   message += FPSTR(HTTP_DIV_STYLE);
   message += FPSTR(HTTP_BUTN_STYLE);
   message += FPSTR(HTTP_SVG_BODY);
+#ifdef LANG_BULGARIAN  
+  message.replace(F("{{svg_temp}}"), "Температура (°C)");
+  message.replace(F("{{svg_pres}}"), "Налягане (hPa)");
+  message.replace(F("{{svg_rhum}}"), "Влажност (%)");
+  message.replace(F("{{svg_rssi}}"), "rssi (dbm)");
+#endif
 #ifdef LANG_ENGLISH  
   message.replace(F("{{svg_temp}}"), "Temperature (°C)");
   message.replace(F("{{svg_pres}}"), "Pressure (hPa)");
@@ -1222,6 +1254,9 @@ void handleGraphs() {
   message.replace(F("{{svg_grid}}"), FPSTR(HTTP_SVG_GRID));
 
   message += FPSTR(HTTP_EXIT_BUTN);
+#ifdef LANG_BULGARIAN
+  message.replace(F("{{exit_btn}}"), "Изход");
+#endif
 #ifdef LANG_ENGLISH
   message.replace(F("{{exit_btn}}"), "Exit");
 #endif
