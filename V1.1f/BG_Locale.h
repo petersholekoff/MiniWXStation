@@ -112,7 +112,7 @@ function getData() {\
           <div class='notabheader'>Температура</div>\
           <div class='notabheader'>Налягане</div>\
           <div class='notabheader'>Влажност</div>\
-          <div class='notabheader'>Усеща се като</div>\
+          <div class='notabheader'>Точка на оросяване</div>\
           <div class='notabheader'>Топлинен индекс</div>\
         </div>\
         <div class='divColumn' style='width:{{fieldsize2}}'>\
